@@ -44,3 +44,12 @@ Esse efeito — o deslocamento do melhor valor de **k** conforme o tamanho do co
 ```julia
 LIMIT_TRAIN = 10_000
 LIMIT_TEST  = 2_000
+```
+
+Ou numa versão mais compacta, numa única linha:
+
+```markdown
+**Para executar o código:** `julia mnist_knn.jl`
+```
+
+
