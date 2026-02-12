@@ -16,6 +16,14 @@ Mesmo hoje, continua sendo um dos algoritmos mais importantes, utilizado em dive
 O algoritmo é conceitualmente simples:  
 ele observa um ponto e infere sua classe olhando para seus vizinhos mais próximos, escolhendo a classe que recebe a **maioria dos votos**.
 
+Uma das maiores vantagens do K-NN, considerando o desenvolvimento de novas tecnologias, é que ele é **altamente paralelizável**.  
+Os cálculos de distância entre pontos são independentes, o que permite executar simultaneamente:
+
+- o processamento de diferentes amostras de teste;  
+- os cálculos de distância de cada amostra de teste para todas as amostras de treino.
+
+Na prática, isso permite acelerar o algoritmo usando **múltiplos núcleos de CPU** e também **GPUs**.
+
 ---
 
 ## Algoritmo KNN em Julia
