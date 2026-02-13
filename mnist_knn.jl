@@ -22,8 +22,8 @@ println("Loading MNIST...")
 train_x_raw, train_y_raw = MNIST(split=:train)[:]
 test_x_raw,  test_y_raw  = MNIST(split=:test)[:]
 
-LIMIT_TRAIN = 40_000
-LIMIT_TEST  = 8_000
+LIMIT_TRAIN = 20_000
+LIMIT_TEST  = 2_000
 
 #784 pixels as 1d array features
 function flatten_images_subset(images)::Matrix{Float32}
@@ -41,9 +41,9 @@ y_raw_subset = copy(train_y_raw[1:LIMIT_TRAIN])
 y_test       = test_y_raw[1:LIMIT_TEST]
 
 # noise is added to the training labels
-println("Corrupting 20% of training labels to simulate noise...")
+println("Corrupting  training labels to simulate noise...")
 rng = Random.MersenneTwister(42)
-n_corrupt = Int(floor(0.20 * length(y_raw_subset)))
+n_corrupt = Int(floor(0.13 * length(y_raw_subset)))
 # pick images to be corrupted
 idxs = shuffle(rng, 1:length(y_raw_subset))[1:n_corrupt]
 
@@ -104,7 +104,7 @@ and compute accuracies for multiple K values in one pass.
 (With BruteTree, "training" is basically storing the points; the big win is avoiding repeated work.)
 =#
 
-k_list = [1, 3, 5, 11, 101, 501]
+k_list = [1, 3, 5, 7, 9, 11, 15, 21, 31, 51, 101, 201, 401, 801]
 maxK = maximum(k_list)
 
 # NearestNeighbors expects : (dim, npoints)
