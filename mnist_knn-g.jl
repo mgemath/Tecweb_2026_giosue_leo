@@ -1,3 +1,13 @@
+################################################################################
+#=
+Install the required packages with:
+using Pkg
+Pkg.add("MLDatasets")
+Pkg.add("Random")
+Pkg.add("Dates")
+Pkg.add("NearestNeighbors")
+Pkg.add("Plots")
+=#
 using MLDatasets
 using Random
 using Dates
