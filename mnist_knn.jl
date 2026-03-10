@@ -22,8 +22,8 @@ println("Loading MNIST...")
 train_x_raw, train_y_raw = MNIST(split=:train)[:]
 test_x_raw,  test_y_raw  = MNIST(split=:test)[:]
 
-LIMIT_TRAIN = 20_000
-LIMIT_TEST  = 2_000
+LIMIT_TRAIN = 60000
+LIMIT_TEST  = 10000
 
 #784 pixels as 1d array features
 function flatten_images_subset(images)::Matrix{Float32}
@@ -37,9 +37,11 @@ end
 X_train = flatten_images_subset(@view train_x_raw[:, :, 1:LIMIT_TRAIN])
 X_test  = flatten_images_subset(@view test_x_raw[:,  :, 1:LIMIT_TEST])
 
+
 y_raw_subset = copy(train_y_raw[1:LIMIT_TRAIN])
 y_test       = test_y_raw[1:LIMIT_TEST]
 
+#=
 # noise is added to the training labels
 println("Corrupting  training labels to simulate noise...")
 rng = Random.MersenneTwister(42)
@@ -48,7 +50,9 @@ n_corrupt = Int(floor(0.13 * length(y_raw_subset)))
 idxs = shuffle(rng, 1:length(y_raw_subset))[1:n_corrupt]
 
 y_raw_subset[idxs] = rand(rng, 0:9, n_corrupt)
+=#
 
+#=
 # --- VISUALIZATION BLOCK START ---
 println("Displaying mixed examples (Corrupted & Clean)...")
 
@@ -84,6 +88,8 @@ println("Plot displayed! First 5 are Lies, last 4 are Clean.")
 sleep(5)
 # --- VISUALIZATION BLOCK END ---
 
+=#
+
 #=
 the distance d(x,y) is compute as euclidiean distance between the feature vectors of the images:
 d(x,y) = sqrt(sum((x_i - y_i)^2 for i in 1:length(x)))
@@ -110,6 +116,12 @@ maxK = maximum(k_list)
 # NearestNeighbors expects : (dim, npoints)
 train_pts = permutedims(X_train)  # (784, n_train)
 test_pts  = permutedims(X_test)   # (784, n_test)
+
+# --- WARM UP THE COMPILER ---
+dummy_tree = BruteTree(train_pts[:, 1:10])
+_ = knn(dummy_tree, test_pts[:, 1:10], 2, true)
+# ----------------------------
+
 
 start_time = now()
 
